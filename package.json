@@ -5,13 +5,18 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "server": "ts-node-dev src/server",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint --fix src/"
   },
   "dependencies": {
+    "classnames": "^2.3.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "sass": "^1.56.0",
+    "socket.io": "^4.5.3",
+    "socket.io-client": "^4.5.3"
   },
   "devDependencies": {
     "@types/react": "^18.0.22",

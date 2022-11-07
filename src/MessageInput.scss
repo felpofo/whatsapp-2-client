@@ -1,0 +1,23 @@
+.send-message {
+  width: 100%;
+  padding: 10px;
+
+  background-color: #202C33;
+
+  input {
+    width: 100%;
+    padding: 12px;
+
+    font-size: 12pt;
+    outline: none;
+    border: none;
+    border-radius: 8px;
+    
+    background-color: #2A3942;
+    color: #E9EDEF;
+    
+    &::placeholder {
+      color: #8696a0;
+    }
+  }
+}
