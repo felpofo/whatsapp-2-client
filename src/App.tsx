@@ -1,58 +1,68 @@
-import { FormEvent, useEffect, useState } from "react";
-import { Socket, io } from "socket.io-client";
-import { Messages } from "./Messages";
-import { MessageInput } from "./MessageInput";
-import { ClientToServerEvents, ServerToClientEvents } from "./types";
+import { FormEvent, useContext, useEffect, useState } from "react";
+import { Messages } from "./components/Messages";
+import { MessageInput } from "./components/MessageInput";
+import { SocketContext } from "./hooks/socket";
+
+import whatsapp2Img from "./assets/logo24.png";
 
 import "./App.scss";
+import { User } from "./types";
 
 export default function App() {
-  const [socket, setSocket] = useState<Socket<ServerToClientEvents, ClientToServerEvents>>();
+  const socket = useContext(SocketContext);
+  const [users, setUsers] = useState<User[]>([]);
   const [name, setName] = useState<string>("");
   const [tempName, setTempName] = useState<string>("");
 
+
   useEffect(() => {
-    const newSocket = io(import.meta.env.VITE_SERVER_IP);
-    setSocket(newSocket);
+    const onlineUsersListener = (users: User[]) => setUsers(users);
+
+    socket.on("onlineUsers", onlineUsersListener);
 
     return () => {
-      newSocket.close();
+      socket.off("onlineUsers", onlineUsersListener);
     };
-  }, [setSocket]);
+  }, []);
+  
 
   function handleSetName(event: FormEvent) {
     event.preventDefault();
 
-    
     if (tempName.trim() === "") return;
     setName(tempName);
-    
-    socket?.emit("setName", tempName);
-    
+    socket.emit("setName", tempName);
     setTempName("");
   }
 
   return (
     <div className="App">
       <header>
-        <span>Whatsapp 2</span>
-        {name ? (
-          <span>Nickname: {name}</span>
-        ) : (
+        <div className="group-info">
+          <img src={whatsapp2Img}/>
           <div>
-            <form onSubmit={handleSetName}>
-              <input placeholder={"Your nickname"} value={tempName} onChange={e => setTempName(e.target.value)}/>
-            </form>
+            <span className="title">Whatsapp 2</span>
+            <div className="online">{
+              users.map(({ id, name }, i, arr) => (
+                <span key={id}>{name.split(" ")[0]}{arr.length !== i + 1 && ", "}</span>
+              ))
+            }</div>
           </div>
-        )}
+        </div>
       </header>
       {socket ? (
         <>
           <div className="chat">
-            <Messages socket={socket}/>
+            <Messages/>
           </div>
-          {name ? <MessageInput socket={socket}/>
-            : <span>Set your nickname to send messages</span>
+          {name ? <MessageInput/>
+            : <div className={"send-message"}>
+              {!name && (
+                <form onSubmit={handleSetName}>
+                  <input placeholder={"Your nickname"} value={tempName} onChange={e => setTempName(e.target.value)}/>
+                </form>
+              )}
+            </div>
           }
         </>
       ) : (
