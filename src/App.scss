@@ -4,10 +4,21 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+
+  ::-webkit-scrollbar {
+    background-color: transparent;
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #374045;
+  }
 }
 
 body {
   font-family: "Inter", sans-serif;
+
+  overflow: hidden;
 }
 
 .App {
@@ -33,6 +44,9 @@ header {
   .group-info {
     display: flex;
     flex-direction: row;
+    align-items: center;
+
+    width: 100%;
 
     padding: 10px 16px;
     gap: 16px;
@@ -41,19 +55,26 @@ header {
 
     img {
       height: 40px;
-      width: 40px;
+      width: 40px;;
     }
 
     div {
       display: flex;
       flex-direction: column;
 
+      overflow: hidden;
+
       .title {
         font-size: 16px;
         line-height: 21px;
       }
 
-      .online span {
+      
+      .online {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
         color: #8696A0;
         font-size: 13px;
         line-height: 20px;
