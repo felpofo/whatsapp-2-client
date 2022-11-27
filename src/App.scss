@@ -112,3 +112,29 @@ header {
   color: #E9EDEF;
   background-color: #0B141A;
 }
+
+.offline {
+  width: 100%;
+  height: 100%;
+
+  color: #E9EDEF;
+  background-color: #0B141A;
+
+  font-size: 2.5rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+
+  .spinner {
+    animation: spin 2s infinite forwards linear;
+  }
+}
+
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
+}

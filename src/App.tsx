@@ -7,6 +7,7 @@ import whatsapp2Img from "./assets/logo512.png";
 
 import "./App.scss";
 import { User } from "./types";
+import { CircleNotch } from "phosphor-react";
 
 export default function App() {
   const socket = useContext(SocketContext);
@@ -44,25 +45,26 @@ export default function App() {
 
   return (
     <div className="App">
-      <header>
-        <div className="group-info">
-          <img src={whatsapp2Img}/>
-          <div>
-            <span className="title">Whatsapp 2</span>
-            <span className="online">
-              {users.map(({ name }, i, arr) =>
-                `${name.split(" ")[0]}${arr.length !== i + 1 ? ", " : ""}`
-              )}</span>
-          </div>
-        </div>
-      </header>
-      {socket ? (
+      {socket.id ? (
         <>
+          <header>
+            <div className="group-info">
+              <img src={whatsapp2Img}/>
+              <div>
+                <span className="title">Whatsapp 2</span>
+                <span className="online">
+                  {users.map(({ name }, i, arr) =>
+                    `${name.split(" ")[0]}${arr.length !== i + 1 ? ", " : ""}`
+                  )}</span>
+              </div>
+            </div>
+          </header>
           <div className="chat">
             <Messages/>
           </div>
-          {name ? <MessageInput/>
-            : <div className={"send-message"}>
+          {name
+            ? <MessageInput/>
+            : <div className="send-message">
               <form onSubmit={handleSetName}>
                 <input placeholder={"Your nickname"} value={tempName} onChange={e => setTempName(e.target.value)}/>
               </form>
@@ -70,7 +72,10 @@ export default function App() {
           }
         </>
       ) : (
-        <div>Not Connected</div>
+        <div className="offline">
+          <h1>Connecting</h1>
+          <CircleNotch className="spinner" size={48}/>
+        </div>
       )}
     </div>
   );
