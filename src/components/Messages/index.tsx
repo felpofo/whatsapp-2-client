@@ -13,22 +13,14 @@ export function Messages(props: MessagesProps) {
   const [messages, setMessages] = useState<Message[]>([]);
 
   useEffect(() => {
-    const messageListener = (message: Message) => setMessages(prev => [...prev, message]);
-    const deleteMessageListener = (id: string) => setMessages(prev => prev.filter(message => message.id !== id && message));
-    const allMessagesListener = (messages: Message[]) => setMessages(messages);
-
-    socket.on("message", messageListener);
-    socket.on("deleteMessage", deleteMessageListener);
-    socket.on("allMessages", allMessagesListener);
-  }, []);
+    socket.on("message", (message) => setMessages(prev => [...prev, message]));
+    socket.on("deleteMessage", (id) => setMessages(prev => prev.filter(message => message.id !== id && message)));
+    socket.on("allMessages", (messages) => setMessages(messages));
+  }, [socket.connected]);
 
   return (
     <div {...props} className={cx("messages", props.className)}>
-      {messages.map(message => (
-        <>
-          <ChatMessage key={message.id} message={message} />
-        </>
-      ))}
+      {messages.map(message => <ChatMessage key={message.id} message={message}/>)}
     </div>
   );
 }

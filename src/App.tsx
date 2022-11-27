@@ -15,20 +15,31 @@ export default function App() {
   const [name, setName] = useState<string>("");
   const [tempName, setTempName] = useState<string>("");
 
-  useEffect(() => {
-    const onlineUsersListener = (users: User[]) => setUsers(users);
+  const [connected, setConnected] = useState<boolean>(false);
 
-    getNameFromLocalStorage();
-    localStorage.setItem("previousSocketId", socket.id);
-    socket.on("onlineUsers", onlineUsersListener);
-  }, [socket.id]);
+  useEffect(() => {
+    socket.on("onlineUsers", (users: User[]) => setUsers(users));
+    
+    socket.on("connect", () => {
+      setConnected(true);
+      socket.connected = true;
+
+      getNameFromLocalStorage();
+      localStorage.setItem("previousSocketId", socket.id);
+    });
+    
+    socket.on("disconnect", () => {
+      setConnected(false);
+      socket.connected = false;
+    });
+  }, []);
 
   function getNameFromLocalStorage() {
     const name = localStorage.getItem("name");
 
     if (name) {
       setName(name);
-      socket.emit("setName", name, localStorage.getItem("previousSocketId") ?? "");
+      socket.emit("setName", name, localStorage.getItem("previousSocketId"));
     }
   }
 
@@ -45,7 +56,7 @@ export default function App() {
 
   return (
     <div className="App">
-      {socket.id ? (
+      {connected ? (
         <>
           <header>
             <div className="group-info">
