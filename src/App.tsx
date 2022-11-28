@@ -8,6 +8,7 @@ import whatsapp2Img from "./assets/logo512.png";
 import "./App.scss";
 import { User } from "./types";
 import { CircleNotch } from "phosphor-react";
+import { ExtendedGroupInfo } from "./components/ExtendedGroupInfo";
 
 export default function App() {
   const socket = useContext(SocketContext);
@@ -15,19 +16,20 @@ export default function App() {
   const [name, setName] = useState<string>("");
   const [tempName, setTempName] = useState<string>("");
 
-  const [connected, setConnected] = useState<boolean>(false);
+  const [isConnected, setConnected] = useState<boolean>(false);
+  const [isGroupInfoOpen, setGroupInfoOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    socket.on("onlineUsers", (users: User[]) => setUsers(users));
+    socket.on("onlineUsers", (users) => setUsers(users));
     
     socket.on("connect", () => {
       setConnected(true);
       socket.connected = true;
-
+      
       getNameFromLocalStorage();
       localStorage.setItem("previousSocketId", socket.id);
     });
-    
+
     socket.on("disconnect", () => {
       setConnected(false);
       socket.connected = false;
@@ -56,36 +58,54 @@ export default function App() {
 
   return (
     <div className="App">
-      {connected ? (
+      {isConnected ? (
         <>
-          <header>
-            <div className="group-info">
-              <img src={whatsapp2Img}/>
-              <div>
-                <span className="title">Whatsapp 2</span>
-                <span className="online">
-                  {users.map(({ name }, i, arr) =>
-                    `${name.split(" ")[0]}${arr.length !== i + 1 ? ", " : ""}`
-                  )}</span>
+          <div className="main-content">
+            <header>
+              <div className="group-info" onClick={() => setGroupInfoOpen(prev => !prev)}>
+                <img src={whatsapp2Img} />
+                <div>
+                  <span className="title">Whatsapp 2</span>
+                  <span className="online">
+                    {users.map(
+                      ({ name }, i, arr) =>
+                        `${name.split(" ")[0]}${
+                          arr.length !== i + 1 ? ", " : ""
+                        }`
+                    )}
+                  </span>
+                </div>
               </div>
+            </header>
+            <div className="chat">
+              <Messages />
             </div>
-          </header>
-          <div className="chat">
-            <Messages/>
+            {name ? (
+              <MessageInput />
+            ) : (
+              <div className="send-message">
+                <form onSubmit={handleSetName}>
+                  <input
+                    autoFocus
+                    placeholder={"Your nickname"}
+                    value={tempName}
+                    onChange={(e) => setTempName(e.target.value)}
+                  />
+                </form>
+              </div>
+            )}
           </div>
-          {name
-            ? <MessageInput/>
-            : <div className="send-message">
-              <form onSubmit={handleSetName}>
-                <input placeholder={"Your nickname"} value={tempName} onChange={e => setTempName(e.target.value)}/>
-              </form>
-            </div>
-          }
+          {isGroupInfoOpen && (
+            <ExtendedGroupInfo
+              users={users}
+              onclose={() => setGroupInfoOpen(false)}
+            />
+          )}
         </>
       ) : (
         <div className="offline">
-          <h1>Connecting</h1>
-          <CircleNotch className="spinner" size={48}/>
+          <h1>Conectando</h1>
+          <CircleNotch className="spinner" size={48} />
         </div>
       )}
     </div>

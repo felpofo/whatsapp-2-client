@@ -26,91 +26,97 @@ body {
   width: 100vw;
 
   display: flex;
-  flex-direction: column;
-}
-
-header {
-  width: 100%;
-
-  display: flex;
   flex-direction: row;
-  align-items: center;
-  align-content: center;
-  justify-content: space-between;
-
-  color: #E9EDEF;
-  background-color: #202C33;
-
-  .group-info {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
-    width: 100%;
-
-    padding: 10px 16px;
-    gap: 16px;
-
-    cursor: pointer;
-
-    img {
-      height: 40px;
-      width: 40px;;
-    }
-
-    div {
-      display: flex;
-      flex-direction: column;
-
-      overflow: hidden;
-
-      .title {
-        font-size: 16px;
-        line-height: 21px;
-      }
-
-      
-      .online {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-
-        color: #8696A0;
-        font-size: 13px;
-        line-height: 20px;
-      }
-    }
-  }
-
-  input {
-    width: 10em;
-    padding: 4px 8px;
-
-    font-size: 12pt;
-    outline: none;
-    border: none;
-    border-radius: 8px;
-    background-color: #2A3942;
-    
-    color: #E9EDEF;
-
-    &::placeholder {
-      color: #8696a0;
-    }
-  }
 }
 
-.chat {
+.main-content {
   display: flex;
   flex-direction: column;
-  align-items: center;
 
   flex: auto;
 
-  overflow: hidden auto;
+  header {
+    width: 100%;
 
-  color: #E9EDEF;
-  background-color: #0B141A;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-content: center;
+    justify-content: space-between;
+
+    color: #E9EDEF;
+    background-color: #202C33;
+
+    .group-info {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      width: 100%;
+
+      padding: 10px 16px;
+      gap: 16px;
+
+      cursor: pointer;
+
+      img {
+        height: 40px;
+        width: 40px;;
+      }
+
+      div {
+        display: flex;
+        flex-direction: column;
+
+        overflow: hidden;
+
+        .title {
+          font-size: 16px;
+          line-height: 21px;
+        }
+
+        .online {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+
+          color: #8696A0;
+          font-size: 13px;
+          line-height: 20px;
+        }
+      }
+    }
+  
+    input {
+      width: 10em;
+      padding: 4px 8px;
+
+      font-size: 12pt;
+      outline: none;
+      border: none;
+      border-radius: 8px;
+      background-color: #2A3942;
+
+      color: #E9EDEF;
+
+      &::placeholder {
+        color: #8696a0;
+      }
+    }
+  }
+  
+  .chat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  
+    flex: auto;
+  
+    overflow: hidden auto;
+  
+    color: #E9EDEF;
+    background-color: #0B141A;
+  }
 }
 
 .offline {
